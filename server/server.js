@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import connect from './database/connection.js';
+import router from './router/route.js';
 
 const app = express();
 const port = 8080;
@@ -13,9 +14,7 @@ app.use(morgan('tiny'));
 app.disable('x-powered-by');
 
 // Routes
-app.get('/', (req, res) => {
-  res.status(201).json('Hello World');
-});
+app.use('/api', router);
 
 connect()
   .then(() => {
