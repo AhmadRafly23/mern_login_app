@@ -1,5 +1,15 @@
 import { Router } from 'express';
-import { register } from '../controllers/appController.js';
+import {
+  generateOTP,
+  getUser,
+  login,
+  register,
+  resetPassword,
+  updateUser,
+  verifyOTP,
+  verifyUser,
+} from '../controllers/appController.js';
+import { auth, localVariables } from '../middleware/auth.js';
 // import * as controller from '../controllers/appController';
 
 const router = Router();
@@ -12,22 +22,18 @@ router.post('/registerEmail', (req, res) => {
 router.post('/authenticate', (req, res) => {
   res.status(201).json('Hello World');
 });
-router.post('/login', (req, res) => {
-  res.status(201).json('Hello World');
-});
+router.post('/login', verifyUser, login);
 
 /*Get Methods*/
-router.get('/user/:username', (req, res) => {
-  res.status(201).json('Hello World');
-});
-router.get('/generateOTP', (req, res) => {
-  res.status(201).json('Hello World');
-});
-router.get('/verifyOTP', (req, res) => {
-  res.status(201).json('Hello World');
-});
+router.get('/user/:username', getUser);
+router.get('/generateOTP', verifyUser, localVariables, generateOTP);
+router.get('/verifyOTP', verifyUser, verifyOTP);
 router.get('/createResetSession', (req, res) => {
   res.status(201).json('Hello World');
 });
+
+/*Put Methods*/
+router.put('/updateUser', auth, updateUser);
+router.put('/resetPassword', verifyUser, resetPassword);
 
 export default router;

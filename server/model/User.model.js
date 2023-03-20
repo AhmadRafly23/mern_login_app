@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 export const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, 'Username is required'],
-    unique: [true, 'Username already exists'],
+    required: [true, 'Please provide unique Username'],
+    unique: [true, 'Username Exist'],
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: [true, 'Please provide a password'],
     unique: false,
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: [true, 'Please provide a unique email'],
     unique: true,
   },
   firstName: { type: String },
@@ -23,4 +23,4 @@ export const UserSchema = new mongoose.Schema({
   profile: { type: String },
 });
 
-export const User = mongoose.model('User', UserSchema);
+export default mongoose.model.Users || mongoose.model('User', UserSchema);
