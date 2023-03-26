@@ -7,9 +7,6 @@ export async function verifyUser(req, res, next) {
   try {
     const { username } = req.method === 'GET' ? req.query : req.body;
 
-    if (!username)
-      return res.status(400).send({ error: 'Username is required' });
-
     // check the user existance
     let exist = await UserModel.findOne({ username });
     if (!exist) return res.status(404).send({ error: "Can't find User!" });

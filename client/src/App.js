@@ -14,43 +14,39 @@ import Username from './components/Username';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <h1>Ini Halaman Home</h1>
+    element: <Username />,
   },
   {
     path: '/recovery',
-    element: <Recovery />
+    element: <Recovery />,
   },
   {
     path: '/profile',
-    element: <Profile />
+    element: <Profile />,
   },
   {
     path: '/password',
-    element: <Password />
+    element: <Password />,
   },
   {
     path: '/register',
-    element: <Register />
+    element: <Register />,
   },
   {
     path: '/reset',
-    element: <Reset />
-  },
-  {
-    path: '/username',
-    element: <Username />
+    element: <Reset />,
   },
   {
     path: '*',
-    element: <PageNotFound />
-  }
+    element: <PageNotFound />,
+  },
 ]);
 
 function App() {
   return (
-   <main>
+    <main>
       <RouterProvider router={router} />
-   </main>
+    </main>
   );
 }
 

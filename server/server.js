@@ -3,11 +3,13 @@ import morgan from 'morgan';
 import cors from 'cors';
 import connect from './database/connection.js';
 import router from './router/route.js';
+import dotenv from 'dotenv';
 
 const app = express();
 const port = 8080;
 
 // Middlewares
+dotenv.config();
 app.use(express.json());
 app.use(cors());
 app.use(morgan('tiny'));
