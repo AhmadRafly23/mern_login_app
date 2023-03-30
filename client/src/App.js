@@ -9,6 +9,7 @@ import PageNotFound from './components/PageNotFound';
 import Register from './components/Register';
 import Reset from './components/Reset';
 import Username from './components/Username';
+import { AuthorizeUser, ProtectRoute } from './middleware/auth';
 
 /*Create Routes*/
 const router = createBrowserRouter([
@@ -22,11 +23,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <Profile />,
+    element: (
+      <AuthorizeUser>
+        <Profile />
+      </AuthorizeUser>
+    ),
   },
   {
     path: '/password',
-    element: <Password />,
+    element: (
+      <ProtectRoute>
+        <Password />
+      </ProtectRoute>
+    ),
   },
   {
     path: '/register',
