@@ -17,8 +17,6 @@ export default function Password() {
   } = useAuthStore();
   const [{ isLoading, apiData, serverError }] = useFetch('/user/' + username);
 
-  console.log(isLoading);
-
   const formik = useFormik({
     initialValues: {
       password: '',
