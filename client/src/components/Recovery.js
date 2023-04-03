@@ -1,21 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Username.module.css';
-import { useFormik } from 'formik';
-import { Toaster } from 'react-hot-toast';
-import { passwordValidate } from '../helper/validate';
+import { toast, Toaster } from 'react-hot-toast';
+import { useAuthStore } from '../store/store';
+import { useNavigate } from 'react-router-dom';
+import { generateOTP, verifyOTP } from '../helper/helper';
 
 export default function Recovery() {
-  const formik = useFormik({
-    initialValues: {
-      password: '',
-    },
-    validate: passwordValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      console.log(values);
-    },
-  });
+  const { username } = useAuthStore((state) => state.auth);
+  const [otp, setOtp] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    generateOTP(username).then((res) => {
+      if (res) {
+        setOtp(res);
+        return toast.success('OTP has been send to your email!');
+      }
+      return toast.error('Problem while generating OTP!');
+    });
+  }, [username]);
+
+  const resendOTP = () => {
+    const sentPromise = generateOTP(username);
+
+    toast.promise(sentPromise, {
+      loading: 'Sending...',
+      success: <b>OTP has been send to your email!</b>,
+      error: <b>Could not Send it!</b>,
+    });
+
+    sentPromise.then((res) => {
+      setOtp(res);
+    });
+  };
+
+  const handleSubmitOTP = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log(otp);
+      const { status } = await verifyOTP({ username, code: otp });
+      if (status === 201) {
+        toast.success('Verify Successfully!');
+        return navigate('/reset');
+      }
+    } catch (err) {
+      return toast.error('Wront OTP! Check email again!');
+    }
+  };
 
   return (
     <div className="container mx-auto">
@@ -29,25 +61,31 @@ export default function Recovery() {
             </span>
           </div>
 
-          <form className="pt-20" onSubmit={formik.handleSubmit}>
+          <form className="pt-20">
             <div className="textbox flex flex-col items-center gap-6">
               <span className="py-4 text-sm text-left text-gray-500">
                 Enter 6 digit OTP sent to your email address.
               </span>
-              <input
-                {...formik.getFieldProps('password')}
-                className={styles.textbox}
-                type="text"
-                placeholder="OTP"
-              />
-              <button className={styles.btn} type="submit">
+              <input className={styles.textbox} type="text" placeholder="OTP" />
+              <button
+                className={styles.btn}
+                type="submit"
+                onClick={handleSubmitOTP}
+              >
                 Recover
               </button>
             </div>
 
             <div className="text-center py-4">
               <span className="text-gray-500">
-                Can't get OTP? <button className="text-red-500">Resend</button>
+                Can't get OTP?{' '}
+                <button
+                  className="text-red-500"
+                  type="button"
+                  onClick={resendOTP}
+                >
+                  Resend
+                </button>
               </span>
             </div>
           </form>

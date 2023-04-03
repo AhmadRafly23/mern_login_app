@@ -111,7 +111,7 @@ export async function generateOTP(username) {
 }
 
 /**Verify OTP*/
-export async function verifyOTP(username, code) {
+export async function verifyOTP({ username, code }) {
   try {
     const { data, status } = await axios.get(
       `/api/verifyOTP?username=${username}&code=${code}`
