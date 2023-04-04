@@ -31,8 +31,6 @@ export async function resetPasswordValidation(values) {
     errors.exist = toast.error('Password not match...!');
   }
 
-  console.log(errors);
-
   return errors;
 }
 

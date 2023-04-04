@@ -13,7 +13,6 @@ export default function Recovery() {
   useEffect(() => {
     generateOTP(username).then((res) => {
       if (res) {
-        setOtp(res);
         return toast.success('OTP has been send to your email!');
       }
       return toast.error('Problem while generating OTP!');
@@ -30,7 +29,7 @@ export default function Recovery() {
     });
 
     sentPromise.then((res) => {
-      setOtp(res);
+      return;
     });
   };
 
@@ -38,14 +37,14 @@ export default function Recovery() {
     e.preventDefault();
 
     try {
-      console.log(otp);
       const { status } = await verifyOTP({ username, code: otp });
       if (status === 201) {
         toast.success('Verify Successfully!');
         return navigate('/reset');
       }
-    } catch (err) {
       return toast.error('Wront OTP! Check email again!');
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -66,7 +65,12 @@ export default function Recovery() {
               <span className="py-4 text-sm text-left text-gray-500">
                 Enter 6 digit OTP sent to your email address.
               </span>
-              <input className={styles.textbox} type="text" placeholder="OTP" />
+              <input
+                className={styles.textbox}
+                type="text"
+                placeholder="OTP"
+                onChange={(e) => setOtp(e.target.value)}
+              />
               <button
                 className={styles.btn}
                 type="submit"
